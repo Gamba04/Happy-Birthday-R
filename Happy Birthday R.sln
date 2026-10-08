@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.37530.7
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Happy Birthday R", "Happy Birthday R.csproj", "{6CFB22F6-1FF7-441D-A160-D35E4CADEBCF}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Build|x64 = Build|x64
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6CFB22F6-1FF7-441D-A160-D35E4CADEBCF}.Build|x64.ActiveCfg = Build|x64
+		{6CFB22F6-1FF7-441D-A160-D35E4CADEBCF}.Build|x64.Build.0 = Build|x64
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {49C1A335-9BAD-4D5E-8F5B-A08C88608849}
+	EndGlobalSection
+EndGlobal

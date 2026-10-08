@@ -1,63 +1,35 @@
 ﻿using System;
-using System.Threading;
 
 public static class Input
 {
 	public enum Key
 	{
-		W = 0x57,
 		A = 0x41,
-		S = 0x53,
 		D = 0x44,
 		Space = 0x20,
-		R = 0x52
+		R = 0x52,
+		Ctrl = 0x11,
+		W = 0x57,
+		Alt = 0x12,
+		F4 = 0x73
 	}
 
 	public static bool GetKey(Key key)
 	{
-		short value = Win32.GetAsyncKeyState(key);
-
-		return (value & 0x8000) != 0;
-	}
-
-	#region Debug
-
-	public static void Debug()
-	{
-		while (true)
+		if (IsFocused())
 		{
-			Reset();
-			Draw();
-			Wait();
+			short value = Win32.GetAsyncKeyState(key);
+
+			return (value & 0x8000) != 0;
 		}
+
+		return false;
 	}
 
-	private static void Reset()
+	private static bool IsFocused()
 	{
-		Console.SetCursorPosition(0, 0);
+		IntPtr focus = Win32.GetForegroundWindow();
+
+		return Screen.window == focus;
 	}
-
-	private static void Draw()
-	{
-		Draw(" W\n", Key.W);
-		Draw("A", Key.A);
-		Draw("S", Key.S);
-		Draw("D", Key.D);
-	}
-
-	private static void Draw(string text, Key key)
-	{
-		bool isPressed = GetKey(key);
-
-		Console.ForegroundColor = isPressed ? ConsoleColor.Yellow : ConsoleColor.DarkGray;
-		Console.Write(text);
-	}
-
-	private static void Wait()
-	{
-		Thread.Sleep(16);
-	}
-
-	#endregion
-
 }

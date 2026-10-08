@@ -37,6 +37,7 @@ public static class Program
 		{
 			TimeSpan startTime = stopwatch.Elapsed;
 
+			UpdateClose();
 			Scene.Update();
 			Screen.Render();
 
@@ -51,6 +52,14 @@ public static class Program
 		if (target > deltaTime)
 		{
 			Thread.Sleep(target - deltaTime);
+		}
+	}
+
+	private static void UpdateClose()
+	{
+		if (Input.GetKey(Input.Key.Ctrl | Input.Key.W) || Input.GetKey(Input.Key.Alt | Input.Key.F4))
+		{
+			Win32.SendMessage(Screen.window, Win32.Message.Close);
 		}
 	}
 

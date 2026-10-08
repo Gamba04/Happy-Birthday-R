@@ -9,17 +9,54 @@ public static class Screen
 	private static readonly char[] textBuffer = InitTextBuffer();
 	private static readonly ConsoleColor[] colorBuffer = InitColorBuffer();
 
+	public static IntPtr window;
+
 	#region Init
 
 	public static void Init()
 	{
+		window = GetConsole();
+
+		CenterWindow();
 		DisableResize();
 		DisableSelection();
 	}
 
+	private static IntPtr GetConsole()
+	{
+		Prepare();
+
+		return Win32.GetConsoleWindow();
+	}
+
+	private static void CenterWindow()
+	{
+		int width = Win32.GetSystemMetrics(Win32.SystemMetric.ScreenWidth);
+		int height = Win32.GetSystemMetrics(Win32.SystemMetric.ScreenHeight);
+
+		Vector2 screen = new Vector2(width, height);
+		Vector2 size = GetWindowSize();
+		Vector2 offset = Vector2.down * size.y / 8;
+		Vector2 position = (screen - size) / 2 + offset;
+
+		Win32.SetWindowPos(window, IntPtr.Zero, position.x, position.y, 0, 0, Win32.PositionFlags.NoSize);
+
+		static Vector2 GetWindowSize()
+		{
+			if (Win32.GetWindowRect(window, out Win32.Rect rect))
+			{
+				int width = rect.right - rect.left;
+				int height = rect.bottom - rect.top;
+
+				return new Vector2(width, height);
+			}
+
+			return Vector2.zero;
+		}
+	}
+
 	private static void DisableResize()
 	{
-		IntPtr window = Win32.GetConsoleWindow();
 		IntPtr menu = Win32.GetSystemMenu(window);
 
 		Win32.DeleteMenu(menu, Win32.MenuControl.Resize);
@@ -105,9 +142,13 @@ public static class Screen
 
 	public static void Render()
 	{
-		Prepare();
-		Present();
-		Clear();
+		try
+		{
+			Prepare();
+			Present();
+			Clear();
+		}
+		catch { }
 	}
 
 	private static void Prepare()
@@ -116,16 +157,10 @@ public static class Screen
 
 		Console.SetWindowPosition(0, 0);
 		Console.SetWindowSize(size.x, size.y);
-
-		SetBufferSize(size);
-
+		Console.SetBufferSize(size.x, size.y);
 		Console.SetCursorPosition(0, 0);
-		Console.CursorVisible = false;
-	}
 
-	private static void SetBufferSize(Vector2 size)
-	{
-		try { Console.SetBufferSize(size.x, size.y); } catch { }
+		Console.CursorVisible = false;
 	}
 
 	private static void Present()
@@ -146,7 +181,6 @@ public static class Screen
 				currentColor = color;
 			}
 		}
-
 	}
 
 	private static void Clear()
